@@ -8,7 +8,7 @@
     "devStart": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Godfrey Turqueza",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^2.19.1",
