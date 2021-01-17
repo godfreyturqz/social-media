@@ -1,18 +1,17 @@
 {
   "name": "social-media",
   "version": "1.0.0",
-  "description": "",
-  "main": "_SERVER.js",
+  "description": "MERNG Stack",
+  "main": "server.js",
   "scripts": {
-    "start": "node _SERVER.js",
-    "devStart": "nodemon _SERVER.js"
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Godfrey Turqueza",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^2.19.1",
-    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "graphql": "^15.4.0",
