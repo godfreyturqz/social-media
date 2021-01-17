@@ -4,18 +4,20 @@
   "description": "MERNG Stack",
   "main": "server.js",
   "scripts": {
-    "start": "cd server && yarn install && yarn start",
-    "devStart": "cd server && yarn devStart"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/godfreyturqz/social-media.git"
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
   },
   "keywords": [],
   "author": "Godfrey Turqueza",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/godfreyturqz/social-media/issues"
+  "dependencies": {
+    "apollo-server-express": "^2.19.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "graphql": "^15.4.0",
+    "mongoose": "^5.11.10"
   },
-  "homepage": "https://github.com/godfreyturqz/social-media#readme"
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
 }
