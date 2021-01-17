@@ -1,0 +1,20 @@
+{
+  "name": "social-media",
+  "version": "1.0.0",
+  "description": "MERNG Stack",
+  "main": "_SERVER.js",
+  "scripts": {
+    "start": "cd SERVER && yarn start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/godfreyturqz/social-media.git"
+  },
+  "keywords": [],
+  "author": "Godfrey Turqueza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/godfreyturqz/social-media/issues"
+  },
+  "homepage": "https://github.com/godfreyturqz/social-media#readme"
+}
