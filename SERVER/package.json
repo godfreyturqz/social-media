@@ -1,11 +1,11 @@
 {
   "name": "social-media",
   "version": "1.0.0",
-  "description": "",
-  "main": "_SERVER.js",
+  "description": "MERNG Stack",
+  "main": "server.js",
   "scripts": {
-    "start": "node _SERVER.js",
-    "devStart": "nodemon _SERVER.js"
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
