@@ -1,14 +1,22 @@
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const { UserInputError } = require('apollo-server-express')
 // RELATIVE FILES
 const UserModel = require('../models/UserModel')
+const { userInputValidator } = require('../utils/userInputValidator')
+const { hashPassword, comparePassword } = require('../utils/password')
+const { createJWT } = require('../utils/createJWT')
+
 
 const userResolver = {
     register: async (parent, args) => {
-        const {registerInput: { email, password, confirmPassword }} = args
+        const { registerInput: { email, password, confirmPassword } } = args
 
-        const salt = await bcrypt.genSalt()
-        const hashedPassword = await bcrypt.hash(password, salt)
+        const errors = userInputValidator(email, password, confirmPassword)
+        if(Object.keys(errors).length >= 1) throw new UserInputError('User input validation error', { errors })
+
+        const isEmailExists = await UserModel.findOne({email})
+        if(isEmailExists) throw new UserInputError('Account already exists')
+
+        const hashedPassword = await hashPassword(password)
 
         const newUser = await UserModel.create({
             email,
@@ -16,7 +24,7 @@ const userResolver = {
             createdAt: new Date().toString()
         })
 
-        const token = jwt.sign({id: newUser._id}, process.env.JWT, {expiresIn: '1h'})
+        const token = createJWT(newUser._id)
 
         return {
             id: newUser._id,
