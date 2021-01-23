@@ -9,7 +9,11 @@ const resolvers = require('./resolvers')
 // ------------------------------
 // APOLLO SERVER
 // ------------------------------
-const server = new ApolloServer({typeDefs, resolvers})
+const server = new ApolloServer({
+  typeDefs, 
+  resolvers,
+  context: ({ req }) => ({ req })
+})
 server.applyMiddleware({app})
 const PORT = process.env.PORT || 5000
 
@@ -22,7 +26,8 @@ app.listen({port: PORT}, () => {
 // ------------------------------
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 })
 .then(() => console.log('Connected to MongoDB'))
 .catch(error => console.log(error))

@@ -1,13 +1,12 @@
 const postResolver = require('./postResolver')
 const userResolver = require('./userResolver')
 
-const resolvers = {
+module.exports = {
     Query: {
-        ...postResolver
+        ...postResolver.Query
     },
     Mutation: {
-        ...userResolver
+        ...userResolver.Mutation,
+        ...postResolver.Mutation
     }
 }
-
-module.exports = resolvers
