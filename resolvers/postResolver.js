@@ -7,6 +7,15 @@ const postResolver = {
             return posts
         } catch (error) {
             throw new Error(error)
+        getPost: async (parent, args) => {
+            try {
+                const { postId }= args
+                const post = await PostModel.findById(postId)
+                return post
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
     Mutation: {
         createPost: async (parent, args, context) => {
             const user = checkAuth(context)
