@@ -9,7 +9,11 @@ const resolvers = require('./resolvers')
 // ------------------------------
 // APOLLO SERVER
 // ------------------------------
-const server = new ApolloServer({typeDefs, resolvers})
+const server = new ApolloServer({
+  typeDefs, 
+  resolvers,
+  context: ({ req }) => ({ req })
+})
 server.applyMiddleware({app})
 const PORT = process.env.PORT || 5000
 
