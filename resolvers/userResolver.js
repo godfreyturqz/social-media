@@ -1,15 +1,21 @@
-const { UserInputError } = require('apollo-server-express')
-// RELATIVE FILES
+const { UserInputError, AuthenticationError } = require('apollo-server-express')
+
 const UserModel = require('../models/UserModel')
 const { userInputValidator } = require('../utils/userInputValidator')
 const { hashPassword, comparePassword } = require('../utils/password')
-const { createJWT } = require('../utils/createJWT')
+const { createJWT } = require('../utils/jwt')
 
 
 module.exports = {
+    Query: {
+        getUsers: async () => {
+            const usersData = await UserModel.find().sort({createdAt: 1})
+            return usersData
+        }
+    },
     Mutation: {
         register: async (parent, args) => {
-            const { registerInput: { email, password, confirmPassword } } = args
+            const { registerInput: { firstname, lastname, email, password, confirmPassword } } = args
     
             const errors = userInputValidator(email, password, confirmPassword)
             if(Object.keys(errors).length >= 1) throw new UserInputError('User input validation error', { errors })
@@ -20,6 +26,8 @@ module.exports = {
             const hashedPassword = await hashPassword(password)
     
             const newUser = await UserModel.create({
+                firstname,
+                lastname,
                 email,
                 password: hashedPassword,
                 createdAt: new Date().toString()
@@ -27,12 +35,7 @@ module.exports = {
     
             const token = createJWT(newUser._id)
 
-            return {
-                id: newUser._id,
-                email: newUser.email,
-                createdAt: newUser.createdAt,
-                token
-            }
+            return { ...newUser, token }
         },
         login: async (parent, args) => {
             const { loginInput: { email, password } } = args
@@ -44,16 +47,11 @@ module.exports = {
             if(userData === null) throw new UserInputError('Account does not exists')
     
             const isMatch = await comparePassword(password, userData.password)
-            if(!isMatch) throw Error('Some of your information isn\'t correct. Please try again')
+            if(!isMatch) throw AuthenticationError('Some of your information isn\'t correct. Please try again')
 
             const token = createJWT(userData._id)
 
-            return {
-                id: userData._id,
-                email: userData.email,
-                createdAt: userData.createdAt,
-                token
-            }
+            return { ...userData, token }
         }
     }
 }

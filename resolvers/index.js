@@ -4,6 +4,7 @@ const commentResolver = require('./commentResolver')
 
 module.exports = {
     Query: {
+        ...userResolver.Query,
         ...postResolver.Query
     },
     Mutation: {
