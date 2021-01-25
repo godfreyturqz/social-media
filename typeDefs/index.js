@@ -2,6 +2,7 @@ const { gql } = require('apollo-server-express')
 
 const typeDefs = gql`
     type Query {
+        getUsers: [User]
         getPosts: [Post]
         getPost(postId: ID): Post
     }
@@ -27,6 +28,8 @@ const typeDefs = gql`
     }
     type User {
         id: ID
+        firstname: String
+        lastname: String
         email: String
         createdAt: String
         token: String
@@ -40,13 +43,15 @@ const typeDefs = gql`
         likes: [Like]
     }
     input RegisterInput {
-        email: String,
-        password: String,
+        firstname: String
+        lastname: String
+        email: String
+        password: String
         confirmPassword: String
     }
     input LoginInput {
-        email: String,
-        password: String,
+        email: String
+        password: String
         confirmPassword: String
     }
 `
