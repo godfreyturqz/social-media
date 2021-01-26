@@ -10,6 +10,7 @@ module.exports.hashPassword = async (password) => {
 
 module.exports.comparePassword = async (loginPassword, dbPassword) => {
 
+    // returns true or false
     const isMatch = await bcrypt.compare(loginPassword, dbPassword)
 
     return isMatch

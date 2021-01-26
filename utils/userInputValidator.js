@@ -1,6 +1,6 @@
 const validator = require('validator')
 
-module.exports.userInputValidator = (email, password, confirmPassword) => {
+module.exports.userInputValidator = (email, password, confirmPassword = null) => {
 
     const errors = {}
 

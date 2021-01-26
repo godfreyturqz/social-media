@@ -1,76 +1,76 @@
 const { AuthenticationError, UserInputError } = require('apollo-server-express')
 const PostModel = require('../models/PostModel')
-const { checkAuth }= require('../utils/checkAuth')
+const UserModel = require('../models/UserModel')
+const { verifyJWT }= require('../utils/jwt')
 
 
-module.exports = {
-    Query: {
-        getPosts: async () => {
-            try {
-                const posts = await PostModel.find().sort({createdAt: -1})
-                return posts
-            } catch (error) {
-                throw new Error(error)
-            }
-        },
-        getPost: async (parent, args) => {
-            try {
-                const { postId }= args
-                const post = await PostModel.findById(postId)
-                return post
-            } catch (error) {
-                throw new Error(error)
-            }
+module.exports.Query = {
+    getPosts: async () => {
+        const posts = await PostModel.find().sort({createdAt: -1})
+        return posts
+    },
+    getPost: async (parent, args) => {
+        const { postID }= args
+        const post = await PostModel.findById(postID)
+        return post
+    }
+}
+
+module.exports.Mutation = {
+    createPost: async (parent, args, context) => {
+        const userID = verifyJWT(context)
+        const { post } = args
+
+        if(post.trim() === '') throw new UserInputError('Empty post')
+
+        const { firstname, lastname } = await UserModel.findById(userID)
+
+        const newPost = await PostModel.create({
+            userID,
+            post,
+            createdAt: new Date().toString(),
+            firstname,
+            lastname
+        })
+
+        return {
+            id: newPost._id,
+            ...newPost._doc
         }
     },
-    Mutation: {
-        createPost: async (parent, args, context) => {
-            const user = checkAuth(context)
-            const { body } = args
+    deletePost: async (parent, args, context) => {
+        const userID = verifyJWT(context)
+        const { postID } = args
 
-            const newPost = await PostModel.create({
-                body,
-                user: user.id,
+        const post = await PostModel.findById(postID)
+        if(userID !== post.userID) throw new AuthenticationError('Action not allowed')
+        
+        const deletedPost = await PostModel.findByIdAndRemove(postID)
+
+        return deletedPost
+    },
+    likePost: async (parent, args, context) => {
+        const userID = verifyJWT(context)
+        const { postID } = args
+
+        const post = await PostModel.findById(postID)
+        if(!post) throw new UserInputError('Post not found')
+
+        const isLiked = post.likes.find(like => like.userID === userID)
+        if (isLiked) {
+            post.likes = post.likes.filter(like => like.userID !== userID)
+        } else {
+            const { firstname, lastname } = await UserModel.findById(userID)
+            post.likes.push({
+                userID,
+                firstname,
+                lastname,
                 createdAt: new Date().toString()
             })
-
-            return newPost
-        },
-        deletePost: async (parent, args, context) => {
-            const user = checkAuth(context)
-            const { postId } = args
-
-            try {
-                const post = await PostModel.findById(postId)
-                if(user.email !== post.email) throw new AuthenticationError('Action not allowed')
-                
-                const deletedPost = await PostModel.findByIdAndRemove(postId)
-
-                return deletedPost
-
-            } catch (error) {
-                throw new Error(error)
-            }
-        },
-        likePost: async (parent, args, context) => {
-            const user = checkAuth(context)
-            const { postId } = args
-
-            const post = await PostModel.findById(postId)
-            if(!post) throw new UserInputError('Post not found')
-
-            if (post.likes.find(like => like.username === user.username)) {
-                post.likes = post.likes.filter(like => like.username === user.username)
-            } else {
-                post.likes.push({
-                    username: user.username,
-                    createdAt: new Date().toString()
-                })
-            }
-
-            await post.save()
-
-            return post
         }
+
+        await post.save()
+
+        return post
     }
 }
