@@ -17,7 +17,7 @@ const verifyJWT = (context) => {
     const token = authHeader.split('Bearer ')[1]
     if(!token) throw new AuthenticationError('Bearer Token error')
 
-    const userID = jwt.verify(token, process.env.JWT)
+    const { userID, iat, exp } = jwt.verify(token, process.env.JWT)
     if(!userID) throw new AuthenticationError('Invalid/Expired token')
 
     return userID

@@ -1,42 +1,45 @@
 const { UserInputError, AuthenticationError } = require('apollo-server-express')
 const PostModel = require('../models/PostModel')
-const { checkAuth } = require('../utils/checkAuth')
+const UserModel = require('../models/UserModel')
+const { verifyJWT } = require('../utils/jwt')
 
-module.exports = {
-    Mutation: {
-        createComment: async (parent, args, context) => {
-            const { postId, body } = args
-            const user = checkAuth(context)
 
-            if(body.trim() === '') throw new UserInputError('Empty comment')
+module.exports.Mutation = {
+    createComment: async (parent, args, context) => {
+        const userID = verifyJWT(context)
+        const { postID, comment } = args
 
-            const post = await PostModel.findById(postId)
-            if(!post) throw new UserInputError('Post not found')
-            
-            post.comments.unshift({
-                body,
-                username: user.username,
-                createdAt: new Date().toString()
-            })
-            await post.save()
+        if(comment.trim() === '') throw new UserInputError('Empty comment')
 
-            return post
-        },
-        deleteComment: async (parent, args, context) => {
-            const { postId, commentId } = args
-            const user = checkAuth(context)
+        const post = await PostModel.findById(postID)
+        if(!post) throw new UserInputError('Post not found')
+        
+        const { firstname, lastname } = await UserModel.findById(userID)
 
-            const post = await PostModel.findById(postId)
+        post.comments.push({
+            userID,
+            comment,
+            firstname,
+            lastname,
+            createdAt: new Date().toString()
+        })
+        await post.save()
 
-            if (!post) throw new UserInputError('Post not found')
+        return post
+    },
+    deleteComment: async (parent, args, context) => {
+        const userID = verifyJWT(context)
+        const { postID, commentID } = args
 
-            const commentIndex = post.comments.findIndex(comment => comment.id === commentId)
-            if(post.comments[commentIndex].username !== user.username) throw new AuthenticationError('Action not allowed')
-            
-            post.comments.splice(commentIndex, 1)
-            await post.save()
-            
-            return post
-        }
+        const post = await PostModel.findById(postID)
+        if (!post) throw new UserInputError('Post not found')
+
+        const commentIndex = post.comments.findIndex(comment => comment.id === commentID)
+        if(post.comments[commentIndex].userID !== userID) throw new AuthenticationError('Action not allowed')
+        
+        post.comments.splice(commentIndex, 1)
+        await post.save()
+        
+        return post
     }
 }
