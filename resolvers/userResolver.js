@@ -11,6 +11,8 @@ module.exports = {
         getUsers: async () => {
             const usersData = await UserModel.find().sort({createdAt: 1})
             return usersData
+            id: newUser._id,
+            ...newUser._doc,
         }
     },
     Mutation: {
@@ -52,6 +54,8 @@ module.exports = {
             const token = createJWT(userData._id)
 
             return { ...userData, token }
+            id: userData._id,
+            ...userData._doc,
         }
     }
 }
