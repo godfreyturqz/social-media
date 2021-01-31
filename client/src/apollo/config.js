@@ -1,15 +1,7 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client'
-
-const LINK = createHttpLink({
-<<<<<<< Updated upstream
-    uri: 'http://localhost:5000/graphql'
-=======
-    uri: "http://localhost:5000/graphql"
->>>>>>> Stashed changes
-})
+import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 export const client = new ApolloClient({
-    link: LINK,
+    uri: "http://localhost:5000/graphql",
     cache: new InMemoryCache(),
     connectToDevTools: process.env.NODE_ENV === 'development'
 })
