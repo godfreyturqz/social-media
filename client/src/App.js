@@ -1,6 +1,6 @@
 import './App.css'
 import { ApolloProvider } from '@apollo/client'
-import { client } from './ApolloProvider'
+import { client } from './apollo/config'
 
 function App() {
   return (
