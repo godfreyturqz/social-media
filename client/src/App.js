@@ -1,6 +1,7 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/client'
 import { client } from './apollo/config'
+import 'semantic-ui-css/semantic.min.css'
 // pages
 import Home from './pages/Home'
 import Register from './pages/Register'
