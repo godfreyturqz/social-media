@@ -1,6 +1,8 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
 import { GET_POSTS } from '../queries/post'
+// components
+import PostCard from '../components/PostCard'
 
 const Home = () => {
 
@@ -9,11 +11,7 @@ const Home = () => {
     return (
         loading ? <div>Loading</div> :
         error ? <div>Error</div> :
-        data?.getPosts.map(post => 
-            <div key={post.id}>
-                {post.post}
-            </div>    
-        )
+        data?.getPosts.map(post => <PostCard key={post.id} {...post} /> )
     )
 }
 
