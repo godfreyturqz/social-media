@@ -30,10 +30,16 @@ const PostCard = (props) => {
             </Card.Content>
             <Card.Content extra>
                 <Button as='div' labelPosition='right'>
-                    <Button color='blue'>
+                    <Button color='blue' basic>
                         <Icon name='heart' />Like
                     </Button>
-                    <Label basic color='blue' pointing='left'>2,048</Label>
+                    <Label basic color='blue' pointing='left'>4</Label>
+                </Button>
+                <Button as='div' labelPosition='right'>
+                    <Button color='blue' basic>
+                        <Icon name='comment' />
+                    </Button>
+                    <Label basic color='blue' pointing='left'>3</Label>
                 </Button>
             </Card.Content>
         </Card>
