@@ -15,6 +15,17 @@ const typeDefs = gql`
         deleteComment(postID: ID, commentID: ID): Post
         likePost(postID: ID): Post
     }
+    input RegisterInput {
+        firstname: String
+        lastname: String
+        email: String
+        password: String
+        confirmPassword: String
+    }
+    input LoginInput {
+        email: String
+        password: String
+    }
     type Comment {
         id: ID
         userID: ID
@@ -47,17 +58,6 @@ const typeDefs = gql`
         lastname: String
         comments: [Comment]
         likes: [Like]
-    }
-    input RegisterInput {
-        firstname: String
-        lastname: String
-        email: String
-        password: String
-        confirmPassword: String
-    }
-    input LoginInput {
-        email: String
-        password: String
     }
 `
 

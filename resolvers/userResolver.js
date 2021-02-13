@@ -18,10 +18,10 @@ module.exports.Mutation = {
         const {registerInput: { firstname, lastname, email, password, confirmPassword }} = args
 
         const errors = regInputValidator(firstname, lastname, email, password, confirmPassword)
-        if(Object.keys(errors).length >= 1) throw new UserInputError('User Input Validation Error', { errors })
+        if(Object.keys(errors).length >= 1) throw new UserInputError('UserInputError', { errors })
 
         const isEmailExists = await UserModel.findOne({email})
-        if(isEmailExists) throw new UserInputError('Account already exists')
+        if(isEmailExists) throw new UserInputError('UserInputError',{errors: 'Account already exists'})
 
         const hashedPassword = await hashPassword(password)
 
@@ -45,13 +45,13 @@ module.exports.Mutation = {
         const {loginInput: { email, password }} = args
 
         const errors = loginInputValidator(email, password)
-        if(Object.keys(errors).length >= 1) throw new UserInputError('User Input Validation Error', { errors })
+        if(Object.keys(errors).length >= 1) throw new UserInputError('UserInputError', { errors })
 
         const userData = await UserModel.findOne({email})
-        if(userData === null) throw new UserInputError('Account does not exists')
+        if(userData === null) throw new UserInputError('UserInputError', {errors: 'Account does not exists'})
 
         const isMatch = await comparePassword(password, userData.password)
-        if(isMatch === false) throw new AuthenticationError('Some of your information isn\'t correct. Please try again')
+        if(isMatch === false) throw new AuthenticationError('AuthenticationError', {errors: 'Some of your information isn\'t correct. Please try again'})
 
         const token = createJWT(userData._id)
 
