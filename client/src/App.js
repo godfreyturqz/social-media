@@ -10,7 +10,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 
 
-function App() {
+const App = () => {
   return (
     <div className="ui container">
     <ApolloProvider client={client}>
