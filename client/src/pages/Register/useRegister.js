@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { AuthContext } from '../../context/authContext'
 // graphql
 import { useMutation } from '@apollo/client'
 import { REGISTER_USER } from '../../gql/user'
@@ -12,7 +13,7 @@ const useRegister = (props) => {
         password: '',
         confirmPassword: ''
     }
-
+    const context = useContext(AuthContext)
     const [userData, setUserData] = useState(initialUserData)
     const [errors, setErrors] = useState()
     
@@ -22,6 +23,7 @@ const useRegister = (props) => {
             setErrors(res.graphQLErrors[0].extensions.errors)
         },
         onCompleted(){
+            context.login(userData.register)
             setUserData(initialUserData)
             props.history.push('/')
         }
