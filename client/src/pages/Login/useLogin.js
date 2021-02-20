@@ -2,13 +2,13 @@ import { useState, useContext } from 'react'
 import { AuthContext } from '../../context/authContext'
 // graphql
 import { useMutation } from '@apollo/client'
-import { LOGIN_USER } from '../../gql/user'
+import { LOGIN_USER } from '../../gql/user_GQL'
 
 
 const useLogin = (props) => {
 
     const initialUserData = {
-        email: 'gt1@gmail.com',
+        email: 'gt@gmail.com',
         password: 'asd',
     }
     const context = useContext(AuthContext)

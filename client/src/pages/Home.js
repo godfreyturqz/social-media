@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { useQuery } from '@apollo/client'
-import { GET_POSTS } from '../gql/post'
+import { GET_POSTS } from '../gql/post_GQL'
 // components
 import PostCard from '../components/PostCard'
 import PostForm from '../components/PostForm'
