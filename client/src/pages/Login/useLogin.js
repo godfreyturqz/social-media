@@ -8,8 +8,8 @@ import { LOGIN_USER } from '../../gql/user'
 const useLogin = (props) => {
 
     const initialUserData = {
-        email: '',
-        password: '',
+        email: 'gt1@gmail.com',
+        password: 'asd',
     }
     const context = useContext(AuthContext)
     const [userData, setUserData] = useState(initialUserData)
