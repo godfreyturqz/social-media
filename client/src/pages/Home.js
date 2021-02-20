@@ -1,17 +1,25 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useQuery } from '@apollo/client'
 import { GET_POSTS } from '../gql/post'
 // components
 import PostCard from '../components/PostCard'
+import PostForm from '../components/PostForm'
+import { AuthContext } from '../context/authContext'
 
 const Home = () => {
-
+    const { user } = useContext(AuthContext)
     const { loading, error, data } = useQuery(GET_POSTS)
 
     return (
-        loading ? <div>Loading</div> :
-        error ? <div>Error</div> :
-        data?.getPosts.map(post => <PostCard key={post.id} {...post} /> )
+        <div>
+            {user && <PostForm/>}
+            {
+                loading ? <div>Loading</div> :
+                error ? <div>Error</div> :
+                data?.getPosts.map(post => <PostCard key={post.id} {...post} /> )
+            }
+        </div>
+        
     )
 }
 

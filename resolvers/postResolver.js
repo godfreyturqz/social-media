@@ -20,7 +20,7 @@ module.exports.Mutation = {
     createPost: async (parent, args, context) => {
         const userID = verifyJWT(context)
         const { post } = args
-
+        
         if(post.trim() === '') throw new UserInputError('Empty post')
 
         const { firstname, lastname } = await UserModel.findById(userID)

@@ -10,6 +10,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 // context
 import { AuthProvider } from './context/authContext'
+import AuthRoute from './utils/AuthRoute'
 
 const App = () => {
   return (
@@ -20,8 +21,8 @@ const App = () => {
             <NavBar/>
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
+              <AuthRoute exact path="/register" component={Register} />
+              <AuthRoute exact path="/login" component={Login} />
             </Switch>
           </BrowserRouter>
         </ApolloProvider>
