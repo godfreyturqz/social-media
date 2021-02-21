@@ -7,7 +7,7 @@ const PostForm = () => {
 
     const [post, setPost] = useState('')
 
-    const [createPost] = useMutation(CREATE_POST, {
+    const [createPost, {error}] = useMutation(CREATE_POST, {
         variables: {post},
         onError(res){
             console.log(res)
@@ -30,15 +30,23 @@ const PostForm = () => {
     }
 
     return (
-        <Form onSubmit={handleSubmit} autoComplete="off">
-            <h2>Create a post</h2>
-            <Form.Input
-                placeholder = "Share some post"
-                onChange={handleInputs}
-                value={post}
-            />
-            <Button color="blue">Submit</Button>
-        </Form>
+        <>
+            <Form onSubmit={handleSubmit} autoComplete="off">
+                <h2>Create a post</h2>
+                <Form.Input
+                    placeholder = "Share some post"
+                    onChange={handleInputs}
+                    value={post}
+                    error={error ? true : false}
+                />
+                <Button color="blue">Submit</Button>
+            </Form>
+            {error && 
+                <div className="ui error message">
+                    {error.graphQLErrors[0].message}
+                </div>
+            }
+        </>
     )
 }
 
