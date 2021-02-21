@@ -26,6 +26,7 @@ const NavBar = () => {
                 { context.user ? 
                     menuItemUser.map(menuItem =>
                         <Menu.Item
+                            key={menuItem}
                             name={menuItem === 'profile' ? context.user.firstname : menuItem}
                             active={activeItem === menuItem}
                             onClick={menuItem === 'logout' ? context.logout : handleItemClick}
@@ -35,6 +36,7 @@ const NavBar = () => {
                     ) :
                     menuItemPublic.map(menuItem =>
                         <Menu.Item
+                            key={menuItem}
                             name={menuItem}
                             active={activeItem === menuItem}
                             onClick={handleItemClick}
