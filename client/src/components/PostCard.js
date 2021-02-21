@@ -41,11 +41,11 @@ const PostCard = (props) => {
                 <Image
                 floated='right'
                 size='mini'
-                src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
+                src='https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-512.png'
                 as={Link}
                 to={`/${firstname}.${lastname}`}
                 />
-                <Card.Header>{firstname} {lastname}</Card.Header>
+                <Card.Header as={Link} to={`/${firstname}.${lastname}`}>{firstname} {lastname}</Card.Header>
                 <Card.Meta as={Link} to={`/post/${id}`}>{moment(createdAt).fromNow(true)}</Card.Meta>
                 <Card.Description>{post}</Card.Description>
             </Card.Content>
