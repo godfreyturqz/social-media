@@ -6,9 +6,24 @@ export const GET_POSTS = gql`
             id
             userID
             post
+            createdAt
             firstname
             lastname
-            createdAt
+            comments {
+                id
+                userID
+                comment
+                firstname
+                lastname
+                createdAt
+            }
+            likes {
+                id
+                userID
+                firstname
+                lastname
+                createdAt
+            }
         }
     }
 `
@@ -21,6 +36,14 @@ export const CREATE_POST = gql`
             createdAt
             firstname
             lastname
+        }
+    }
+`
+
+export const LIKE_POST = gql`
+    mutation likePost($postID: ID!){
+        likePost(postID: $postID){
+            id
         }
     }
 `
