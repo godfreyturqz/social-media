@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 import { AuthContext } from '../../context/authContext'
 // graphql
 import { useMutation } from '@apollo/client'
-import { REGISTER_USER } from '../../gql/user'
+import { REGISTER_USER } from '../../gql/user_GQL'
 
 const useRegister = (props) => {
 

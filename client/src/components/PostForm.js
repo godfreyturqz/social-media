@@ -1,21 +1,23 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'semantic-ui-react'
 import { useMutation } from '@apollo/client'
-import { CREATE_POST } from '../gql/post'
+import { CREATE_POST, GET_POSTS } from '../gql/post_GQL'
 
 const PostForm = () => {
 
     const [post, setPost] = useState('')
 
-    const [createPost] = useMutation(CREATE_POST, {
+    const [createPost, {error}] = useMutation(CREATE_POST, {
         variables: {post},
         onError(res){
             console.log(res)
         },
-        onCompleted(userData){
-            console.log(userData)
+        onCompleted(res){
+            console.log(res)
             setPost('')
-        }
+        },
+        refetchQueries: [{query: GET_POSTS}],
+        awaitRefetchQueries: true
     })
 
     const handleInputs = (e) => {
@@ -28,15 +30,23 @@ const PostForm = () => {
     }
 
     return (
-        <Form onSubmit={handleSubmit} autoComplete="off">
-            <h2>Create a post</h2>
-            <Form.Input
-                placeholder = "Share some post"
-                onChange={handleInputs}
-                value={post}
-            />
-            <Button color="blue">Submit</Button>
-        </Form>
+        <>
+            <Form onSubmit={handleSubmit} autoComplete="off">
+                <h2>Create a post</h2>
+                <Form.Input
+                    placeholder = "Share some post"
+                    onChange={handleInputs}
+                    value={post}
+                    error={error ? true : false}
+                />
+                <Button color="blue">Submit</Button>
+            </Form>
+            {error && 
+                <div className="ui error message">
+                    {error.graphQLErrors[0].message}
+                </div>
+            }
+        </>
     )
 }
 
