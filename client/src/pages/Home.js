@@ -12,14 +12,13 @@ const Home = () => {
 
     return (
         <div>
-            {user && <PostForm/>}
+            { user && <PostForm/> }
             {
                 loading ? <div>Loading</div> :
                 error ? <div>Error</div> :
-                data?.getPosts.map(post => <PostCard key={post.id} {...post} /> )
+                data?.getPosts.map(post => <PostCard key={post.id} {...post} />)
             }
         </div>
-        
     )
 }
 
