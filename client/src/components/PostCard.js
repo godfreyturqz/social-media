@@ -1,8 +1,9 @@
-import React, { useContext } from 'react'
-import { Card, Icon, Label, Image, Button } from 'semantic-ui-react'
+import React, { useContext, useState } from 'react'
+import { Card, Icon, Label, Image, Button, Input } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { GET_POSTS, LIKE_POST } from '../gql/post_GQL'
+import { CREATE_COMMENT } from '../gql/comment_GQL'
 import { useMutation } from '@apollo/client'
 
 import { AuthContext } from '../context/authContext'
@@ -23,6 +24,9 @@ const PostCard = (props) => {
 
     const { user } = useContext(AuthContext)
 
+    const [toggleCommentForm, setToggleCommentForm] = useState(false)
+    const [comment, setComment] = useState('')
+
     const [likePost] = useMutation(LIKE_POST, {
         variables: {postID: id},
         onError(res){
@@ -35,8 +39,26 @@ const PostCard = (props) => {
         awaitRefetchQueries: true
     })
 
-    const handleLike = () => {
+    const [createComment] = useMutation(CREATE_COMMENT, {
+        variables: {postID: id, comment},
+        onError(res){
+            console.log(res)
+        },
+        onCompleted(res){
+            console.log(res)
+        },
+        refetchQueries: [{query: GET_POSTS}],
+        awaitRefetchQueries: true
+    })
+
+    const handleLike = (e) => {
+        e.preventDefault()
         likePost()
+    }
+
+    const handleSubmitComment = (e) => {
+        e.preventDefault()
+        createComment()
     }
     
     return (
@@ -54,19 +76,30 @@ const PostCard = (props) => {
                 <Card.Description>{post}</Card.Description>
             </Card.Content>
             <Card.Content extra>
-                <Button as='div' labelPosition='right'>
-                    <Button color='blue' basic onClick={handleLike}>
+                <Button as='div' labelPosition='right' onClick={handleLike}>
+                    <Button color='blue' basic >
                         <Icon name='heart' />Like
                     </Button>
                     <Label basic color='blue' pointing='left'>{likes.length}</Label>
                 </Button>
-                <Button as='div' labelPosition='right'>
-                    <Button color='blue' basic as={Link} to={`/post/${id}`}>
+                <Button as='div' labelPosition='right' onClick={() => setToggleCommentForm(!toggleCommentForm)}>
+                    <Button color='blue'  basic>
                         <Icon name='comment' />
                     </Button>
                     <Label basic color='blue' pointing='left'>{comments.length}</Label>
                 </Button>
-            </Card.Content>
+            </Card.Content >
+            {
+                toggleCommentForm &&
+                <Card.Content extra>
+                    <Input 
+                        placeholder="Add a comment..."
+                        icon={{ name: 'send', circular: true, link: true }}
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                    />
+                </Card.Content>
+            }
         </Card>
     )
 }
