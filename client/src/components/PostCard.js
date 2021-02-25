@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react'
-import { Card, Icon, Label, Image, Button, Input } from 'semantic-ui-react'
+import { Card, Icon, Label, Image, Button, Input, Header } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { GET_POSTS, LIKE_POST } from '../gql/post_GQL'
 import { CREATE_COMMENT } from '../gql/comment_GQL'
 import { useMutation } from '@apollo/client'
-
+import CommentGroup from './CommentGroup'
 import { AuthContext } from '../context/authContext'
 
 const PostCard = (props) => {
@@ -51,16 +51,15 @@ const PostCard = (props) => {
         awaitRefetchQueries: true
     })
 
-    const handleLike = (e) => {
-        e.preventDefault()
+    const handleLike = () => {
         likePost()
     }
 
-    const handleSubmitComment = (e) => {
-        e.preventDefault()
+    const handleSubmitComment = () => {
         createComment()
+        setComment('')
     }
-    
+
     return (
         <Card>
             <Card.Content>
@@ -88,18 +87,20 @@ const PostCard = (props) => {
                     </Button>
                     <Label basic color='blue' pointing='left'>{comments.length}</Label>
                 </Button>
-            </Card.Content >
+            </Card.Content>
             {
                 toggleCommentForm &&
                 <Card.Content extra>
                     <Input 
                         placeholder="Add a comment..."
-                        icon={{ name: 'send', circular: true, link: true }}
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                     />
+                    <Button icon="send" onClick={handleSubmitComment}/>
                 </Card.Content>
             }
+            <Header as='h3' dividing>Comments</Header>
+            { comments.map(comment => <CommentGroup {...comment}/>) }
         </Card>
     )
 }
