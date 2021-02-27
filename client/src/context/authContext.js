@@ -41,14 +41,21 @@ const AuthProvider = (props) => {
     }
 
     const logout = () => {
-        localStorage.removeItem('userState')
+        new LocalStorage().clearState()
         dispatch({
             type: 'LOGOUT'
         })
     }
     
     return (
-        <AuthContext.Provider value={{user: state.user, login, logout}} {...props}/>
+        <AuthContext.Provider
+            value={{
+                user: state.user,
+                login,
+                logout
+            }}
+            {...props}
+        />
     )
 }
 
