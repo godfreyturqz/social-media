@@ -19,7 +19,7 @@ const Login = (props) => {
 
     return (
         <Form onSubmit={handleSubmit} className={loading ? 'loading' : ''} autoComplete="off">
-            <h1>Log-in</h1>
+            <h1>Log In</h1>
             { Object.entries(inputLabels).map(([key, value]) =>
                 <Form.Input
                     key={key}
