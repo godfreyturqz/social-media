@@ -1,5 +1,6 @@
 import React from 'react'
 import { Comment } from 'semantic-ui-react'
+import moment from 'moment'
 
 const CommentGroup = (props) => {
 
@@ -17,10 +18,11 @@ const CommentGroup = (props) => {
                 <Comment.Content>
                     <Comment.Author as='a'>{firstname} {lastname}</Comment.Author>
                     <Comment.Metadata>
-                        <div>{createdAt}</div>
+                        <div>{moment(createdAt).fromNow()}</div>
                     </Comment.Metadata>
                     <Comment.Text>{comment}</Comment.Text>
                     <Comment.Actions>
+                        <Comment.Action>Like</Comment.Action>
                         <Comment.Action>Reply</Comment.Action>
                     </Comment.Actions>
                 </Comment.Content>
