@@ -5,46 +5,32 @@ import { AuthContext } from '../context/authContext'
 
 const NavBar = () => {
     const context = useContext(AuthContext)
-    const location = useLocation()
-    const path = location.pathname === '/' ? 'home' : location.pathname.substr(1)
-    const [activeItem, setActiveItem] = useState(path)
-    const handleItemClick = (e, {name}) => setActiveItem(name)
 
-    const menuItemUser = ['profile', 'logout']
-    const menuItemPublic = ['register', 'login']
+    const location = useLocation()
+    const path = '/' || location.pathname.substr(1)
 
     return (
         <Menu pointing secondary size="huge">
             <Menu.Item
                 name='home'
-                active={activeItem === 'home'}
-                onClick={handleItemClick}
+                active={path === '/'}
                 as={Link}
                 to="/"
             />
             <Menu.Menu position='right'>
-                { context.user ? 
-                    menuItemUser.map(menuItem =>
-                        <Menu.Item
-                            key={menuItem}
-                            name={menuItem === 'profile' ? context.user.firstname : menuItem}
-                            active={activeItem === menuItem}
-                            onClick={menuItem === 'logout' ? context.logout : handleItemClick}
-                            as={Link}
-                            to={menuItem}
-                        />
-                    ) :
-                    menuItemPublic.map(menuItem =>
-                        <Menu.Item
-                            key={menuItem}
-                            name={menuItem}
-                            active={activeItem === menuItem}
-                            onClick={handleItemClick}
-                            as={Link}
-                            to={menuItem}
-                        />
-                    )
-                }
+                <Menu.Item
+                    name={context.user.firstname}
+                    active={path === 'profile'}
+                    as={Link}
+                    to={'/profile'}
+                />
+                <Menu.Item
+                    name={'Logout'}
+                    active={path === 'logout'}
+                    as={Link}
+                    to={'/'}
+                    onClick={context.logout}
+                />
             </Menu.Menu>
         </Menu>
     )

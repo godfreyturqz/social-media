@@ -24,4 +24,8 @@ export class LocalStorage {
 			return storedState.value
 		}
 	}
+
+	clearState(){
+		localStorage.removeItem(this.stateKey)
+	}
 }
